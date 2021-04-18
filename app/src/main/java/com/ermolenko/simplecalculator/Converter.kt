@@ -12,6 +12,7 @@ class Converter {
      * Converts an expression to RPN
      * @param expression String
      *
+     *
      * @return Array<String> Array of variables and operators in RPN format
      */
     fun convert(expression: String): Array<String> {
@@ -24,7 +25,7 @@ class Converter {
             if (component == "(") {
                 stack.add(component)
             } else if (component == ")") {
-                while (!stack.isEmpty()) {
+                while (stack.isNotEmpty()) {
                     val last = stack.removeAt(stack.size - 1)
                     if (last != "(") {
                         output.add(last)
@@ -40,7 +41,7 @@ class Converter {
                     for (i in stack.size - 1 downTo 0) {
                         if (!precedence.containsKey(stack[i]))
                             break
-                        if (precedence[component]!! <= precedence[stack[i]]!!) {
+                        if (precedence[component] ?: error("") <= precedence[stack[i]] ?: error("")) {
                             output.add(stack[i])
                             stack.removeAt(i)
                             continue
@@ -54,11 +55,11 @@ class Converter {
             }
         }
         // While there's operators on the stack, pop them to the queue
-        if (!stack.isEmpty()) {
-            while (!stack.isEmpty()) {
+        if (stack.isNotEmpty()) {
+            while (stack.isNotEmpty()) {
                 val element = stack.removeAt(stack.size - 1)
                 if (element == "(" || element == ")") {
-                    throw Exception("Syntax error in expression: $expression  at '$element'")
+                    return arrayOf("null")
                 }
                 output.add(element)
             }
@@ -80,7 +81,7 @@ class Converter {
         for (index in expression.indices) {
             when (expression[index]) {
                 '+', '-', '*', '/', '(', ')' -> {
-                    if (!expression.substring(prevIndex, index).trim().isEmpty())
+                    if (expression.substring(prevIndex, index).trim().isNotEmpty())
                         result.add(expression.substring(prevIndex, index))
                     result.add(expression[index].toString())
                     prevIndex = index + 1
@@ -92,17 +93,4 @@ class Converter {
 
         return result.toTypedArray()
     }
-
-    /*private fun interpretString(expression: String):String{
-        val result = mutableListOf<String>()
-
-        for(index in expression.indices)
-            when(expression[index]){
-                '%'-> result.add("/100")
-                ','-> result.add(".")
-                else ->
-            }
-    }
-
-     */
 }

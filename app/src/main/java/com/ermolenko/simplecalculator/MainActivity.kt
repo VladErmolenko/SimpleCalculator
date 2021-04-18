@@ -42,7 +42,7 @@ class MainActivity : AppCompatActivity() {
 
         var bracketsCheck = false
         var text: String
-        var expression: String = ""
+        var expression = ""
 
         //val myCalculator = Calcutor()
         val myCalculator = RPNRunner()
@@ -108,7 +108,7 @@ class MainActivity : AppCompatActivity() {
         }
         btnBackSpace.setOnClickListener {
             if (tvInput.text.isEmpty()) {
-
+                tvOutput.text=""
             } else {
                 text = tvInput.text.toString()
                 if (text[text.lastIndex] == '(')
